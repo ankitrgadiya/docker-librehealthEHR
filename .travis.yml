@@ -1,0 +1,15 @@
+sudo: required
+
+services:
+    - docker
+
+install:
+    - docker build -t $DOCKER_USERNAME/librehealthehr .
+    - docker run -d -p 80:80 $DOCKER_USERNAME/librehealthehr
+
+script:
+    - docker ps | grep -q libre
+
+after_success:
+    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+    - docker push $DOCKER_USERNAME/librehealthehr
